@@ -1,1 +1,104 @@
+import java.util.ArrayList;
+
+public class CarManager {
+
+    public static void main(String[] args) {
+        // Danh sách các chức năng theo đề
+        ArrayList<String> ops = new ArrayList<>();
+        ops.add("List all brands");
+        ops.add("Add a new brand");
+        ops.add("Search a brand based on its ID");
+        ops.add("Update a brand");
+        ops.add("Save brands to the file (brands.txt)");
+        ops.add("List all cars in ascending order of brand names");
+        ops.add("List cars based on a part of an input brand name");
+        ops.add("Add a car");
+        ops.add("Remove a car based on its ID");
+        ops.add("Update a car based on its ID");
+        ops.add("Save cars to file (cars.txt)");
+
+        // Tạo & nạp dữ liệu
+        BrandList brandList = new BrandList();
+        brandList.loadFromFile("brands.txt");
+
+        CarList carList = new CarList(brandList);
+        carList.loadFromFile("cars.txt");
+
+        Menu menu = new Menu();
+        int choice;
+
+        do {
+            System.out.println("\n=== Minh Trang BMW Showroom ===");
+            choice = menu.int_getChoice(ops);
+
+            switch (choice) {
+                case 0:
+                    System.out.println("Bye!");
+                    break;
+
+                case 1: // List all brands
+                    brandList.listBrands();
+                    break;
+
+                case 2: // Add a new brand
+                    brandList.addBrand();
+                    break;
+
+                case 3: // Search a brand by ID
+                    String searchID = InputUtils.readLine("Nhập Brand ID cần tìm: ");
+                    int pos = brandList.searchID(searchID);
+                    if (pos < 0) System.out.println("Not found");
+                    else System.out.println(brandList.get(pos));
+                    break;
+
+                case 4: // Update a brand
+                    brandList.updateBrand();
+                    break;
+
+                case 5: // Save brands
+                    brandList.saveToFile("brands.txt");
+                    break;
+
+                case 6: // List cars sorted by brand name
+                    carList.listCars();
+                    break;
+
+                case 7: // List cars by a part of brand name
+                    carList.printBasedBrandName();
+                    break;
+
+                case 8: // Add a car
+                    carList.addCar();
+                    break;
+
+                case 9: // Remove a car
+                    carList.removeCar();
+                    break;
+
+                case 10: // Update a car
+                    carList.updateCar();
+                    break;
+
+                case 11: // Save cars
+                    carList.saveToFile("cars.txt");
+                    break;
+
+                default:
+                    System.out.println("Vui lòng chọn 0.." + ops.size());
+            }
+        } while (choice != 0);
+    }
+}
+
+/**
+ * Tiện ích đọc nhanh một dòng từ console, tránh phải tạo nhiều Scanner.
+ * (Không bắt buộc theo đề, chỉ để code gọn hơn cho case 3).
+ */
+class InputUtils {
+    private static final java.util.Scanner SC = new java.util.Scanner(System.in);
+    public static String readLine(String msg) {
+        System.out.print(msg);
+        return SC.nextLine().trim();
+    }
+}
 
